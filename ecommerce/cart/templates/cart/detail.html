@@ -8,16 +8,16 @@
 {% block content %}
     <div class="container">
         <div class="row" style="margin-top: 6%">
-        <h2>Your Shopping Cart
+        <h2>Twój koszyk
             <span class="badge pull-right">
                 {% with totail_items=cart|length %}
                     {% if cart|length > 0 %}
-                        My Shopping Order:
+                        Moje zamówienie:
                         <a href="{% url "cart:cart_detail" %}" style="color: #ffffff">
-                            {{ totail_items }} item {{ totail_items|pluralize }}, Kshs. {{ cart.get_total_price }}
+                            {{ totail_items }} item {{ totail_items|pluralize }}, PLN. {{ cart.get_total_price }}
                         </a>
                         {% else %}
-                        Your cart is empty.
+                        Twój koszyk jest pusty.
                     {% endif %}
                 {% endwith %}
             </span>
@@ -25,12 +25,12 @@
             <table class="table table-striped table-hover">
                 <thead style="background-color: #5AC8FA">
                     <tr>
-                        <th>Image</th>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Remove</th>
-                        <th>Unit Price</th>
-                        <th>Price</th>
+                        <th>Zdjęcie</th>
+                        <th>Produkt</th>
+                        <th>Ilość</th>
+                        <th>Usuń</th>
+                        <th>Cena jednostkowa</th>
+                        <th>Cena</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,29 +46,29 @@
                             <td>
                                 <form action="{% url "cart:cart_add" product.id %}" method="post">
                                     {% csrf_token %}
-                                    {{ item.update_quantity_form.quantity }}
+                                    {{ item.update_quantity_form.ile }}
                                     {{ item.update_quantity_form.update }}
-                                    <input type="submit" value="Update" class="btn btn-info">
+                                    <input type="submit" value="Aktualizuj" class="btn btn-info">
                                 </form>
                             </td>
                             <td>
-                                <a href="{% url "cart:cart_remove" product.id %}">Remove</a>
+                                <a href="{% url "cart:cart_remove" product.id %}">Usuń</a>
                             </td>
-                            <td>kshs. {{ item.price }}</td>
-                            <td>kshs. {{ item.total_price }}</td>
+                            <td>PLN. {{ item.price }}</td>
+                            <td>PLN. {{ item.total_price }}</td>
                         </tr>
                     {% endwith %}
                 {% endfor %}
                 <tr style="background-color: #5AC8FA">
-                    <td><b>Total</b></td>
+                    <td><b>W sumie</b></td>
                     <td colspan="4"></td>
-                    <td colspan="num"><b>kshs. {{ cart.get_total_price }}</b></td>
+                    <td colspan="num"><b>PLN. {{ cart.get_total_price }}</b></td>
                 </tr>
                 </tbody>
             </table>
         <p class="text-right">
-            <a href="{% url "shop:product_list" %}" class="btn btn-default">Continue Shopping</a>
-            <a href="{% url "orders:order_create" %}" class="btn btn-primary">Checkout</a>
+            <a href="{% url "shop:product_list" %}" class="btn btn-default">Kontynuuj zakupy</a>
+            <a href="{% url "orders:order_create" %}" class="btn btn-primary">Potwierdź</a>
         </p>
         </div>
     </div>

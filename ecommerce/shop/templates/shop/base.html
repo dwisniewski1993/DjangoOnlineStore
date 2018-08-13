@@ -15,12 +15,12 @@
          <button class="btn btn-info pull-right">
             {% with totail_items=cart|length %}
                 {% if cart|length > 0 %}
-                    My Shopping Order:
+                    Moje zamówienie:
                     <a href="{% url "cart:cart_detail" %}" style="color: #ffffff">
                         {{ totail_items }} item {{ totail_items|pluralize }}, PLN. {{ cart.get_total_price }}
                     </a>
                     {% else %}
-                    Your cart is empty.
+                    Twój koszyk jest pusty.
                 {% endif %}
             {% endwith %}
          </button>
