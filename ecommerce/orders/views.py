@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
+import smtplib
 
 
 def order_create(request):
@@ -22,3 +23,19 @@ def order_create(request):
     else:
         form = OrderCreateForm()
     return render(request, 'orders/order/create.html', {'form': form})
+
+
+def send_mail(id_num, email_addr, total_cost):
+    MGS = r'Wyślij ' + str(total_cost) + ' na konto: XXXX-XXXX-XXXX-XXXX, o tytule: ORDNUM' + str(id_num)
+    mailserver = smtplib.SMTP('smtp.gmail.com')
+
+    mailserver.ehlo()
+    mailserver.starttls()
+    mailserver.ehlo()
+
+    username = r'login'
+    password = r'password'
+
+    mailserver.login(username, password)
+    mailserver.sendmail(username, email_addr, MGS)
+    mailserver.close()
