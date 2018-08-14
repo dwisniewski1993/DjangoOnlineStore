@@ -1,8 +1,8 @@
 from django.shortcuts import render
+from django.core.mail import send_mail
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
-import smtplib
 
 
 def order_create(request):
@@ -18,6 +18,10 @@ def order_create(request):
                     price=item['price'],
                     quantity=item['quantity']
                 )
+            orderid = order.id
+            fromemail = form['email'].value()
+            totalprice = cart.get_total_price()
+            send_email(id_num=orderid, email_addr=fromemail, total_cost=totalprice)
             cart.clear()
         return render(request, 'orders/order/created.html', {'order': order})
     else:
@@ -25,17 +29,11 @@ def order_create(request):
     return render(request, 'orders/order/create.html', {'form': form})
 
 
-def send_mail(id_num, email_addr, total_cost):
-    MGS = r'Wyślij ' + str(total_cost) + ' na konto: XXXX-XXXX-XXXX-XXXX, o tytule: ORDNUM' + str(id_num)
-    mailserver = smtplib.SMTP('smtp.gmail.com')
+def send_email(id_num, email_addr, total_cost):
+    SUBJECT = r'no-reply'
+    FROM = r'oggyclothes@gmail.com'
+    TO = []
+    TO.append(email_addr)
+    MSG = r'Suma ' + str(total_cost) + ' na konto: XXXX-XXXX-XXXX-XXXX, o tytule: ORDNUM' + str(id_num)
 
-    mailserver.ehlo()
-    mailserver.starttls()
-    mailserver.ehlo()
-
-    username = r'login'
-    password = r'password'
-
-    mailserver.login(username, password)
-    mailserver.sendmail(username, email_addr, MGS)
-    mailserver.close()
+    send_mail(SUBJECT, MSG, FROM, TO)
